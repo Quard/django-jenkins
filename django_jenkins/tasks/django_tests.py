@@ -3,6 +3,7 @@
 """
 Build suite with normal django tests
 """
+from optparse import make_option
 from django.test.simple import build_suite, build_test
 from django.db.models import get_app, get_apps
 from django.conf import settings
@@ -11,6 +12,12 @@ from django_jenkins.tasks import BaseTask
 
 
 class Task(BaseTask):
+    option_list = [
+        make_option("--test-all-apps", dest="test_all",
+            action="store_true", default=False,
+            help="test all apps, ignore PROJECT_APPS")
+    ]
+
     def __init__(self, test_labels, options):
         super(Task, self).__init__(test_labels, options)
         if not self.test_labels:
